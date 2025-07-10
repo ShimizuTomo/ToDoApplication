@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 * tasksテーブルの1件のデータを表すEntity
 */
 public class Task {
+	private String username; // ログインユーザー名追加
 	private long id; // タスクID (PK)
 	private String title; // タイトル
 	private String content; // 内容
@@ -17,6 +18,12 @@ public class Task {
 	private LocalDateTime updatedAt; // 更新日時
 
 	// --- Getter & Setter ---
+	public String getUsername() {
+	    return username;
+	}
+	public void setUsername(String username) {
+	    this.username = username;
+	}
 	public long getId() {
 		return id;
 	}

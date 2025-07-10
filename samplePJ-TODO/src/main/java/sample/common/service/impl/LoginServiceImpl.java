@@ -1,36 +1,32 @@
 package sample.common.service.impl;
 
-import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Resource;
-import sample.common.dao.entity.User;
-import sample.common.logic.LoginLogic;
+import sample.common.dao.LoginDao;
+import sample.common.dao.entity.Login;
 import sample.common.service.LoginService;
 
-@Component
+@Service
 public class LoginServiceImpl implements LoginService {
 
-    @Resource
-    LoginLogic loginLogic;
+    @Autowired
+    private LoginDao loginDao;
 
     @Override
-    public boolean LoginVerification(String email, String password) throws NoSuchAlgorithmException {
-
-        // パスワードのハッシュ化を行う
-        byte[] hashPass = loginLogic.passwordHashing(password);
-
-        // メールとパスワードで整合性チェックを行う
-        User result = loginLogic.getLoginUser(email, hashPass);
-
-        boolean isLogin = false;
-
-        if (result != null) {
-            isLogin = true;
-        }
-
-        return isLogin;
+    public void register(String username, String password) {
+        Login login = new Login();
+        login.setUsername(username);
+        login.setPassword(password);
+        login.setCreatedAt(LocalDateTime.now());
+        login.setUpdatedAt(LocalDateTime.now());
+        loginDao.insert(login);
     }
 
+    @Override
+    public Login login(String username, String password) {
+        return loginDao.findByUsernameAndPassword(username, password);
+    }
 }

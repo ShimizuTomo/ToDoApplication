@@ -1,20 +1,8 @@
 package sample.common.service;
 
-import java.security.NoSuchAlgorithmException;
+import sample.common.dao.entity.Login;
 
-/**
- * ログイン検証service
- */
 public interface LoginService {
-
-    /**
-     * 
-     * メールアドレスとパスワードでログイン可能かを検証します
-     * 
-     * @param email
-     * @param password
-     * @return ログイン可能:true<br>ログイン不可:false
-     * @throws NoSuchAlgorithmException
-     */
-    boolean LoginVerification(String email, String password) throws NoSuchAlgorithmException;
+    void register(String username, String password);
+    Login login(String username, String password);
 }

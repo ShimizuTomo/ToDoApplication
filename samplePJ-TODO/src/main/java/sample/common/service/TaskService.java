@@ -4,13 +4,11 @@ import java.util.List;
 
 import sample.common.dao.entity.Task;
 
-/**
-* タスクサービスインターフェース
-*/
 public interface TaskService {
-	/**
-	* 全タスク取得
-	* @return タスク一覧
-	*/
-	List<Task> getAllTasks();
+    List<Task> getTasksPaged(String username, int page, int size);
+    int getTaskCount(String username);
+    Task getTaskById(Long id, String username);
+    void insertTask(Task task);
+    void updateTask(Task task, String username);
+    void deleteTask(Long id, String username);
 }

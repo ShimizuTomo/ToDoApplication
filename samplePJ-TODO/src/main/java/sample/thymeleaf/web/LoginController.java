@@ -1,47 +1,56 @@
 package sample.thymeleaf.web;
+import jakarta.servlet.http.HttpSession;
 
-import java.security.NoSuchAlgorithmException;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.annotation.Resource;
-import sample.common.service.impl.LoginServiceImpl;
+import sample.common.dao.entity.Login;
+import sample.common.service.LoginService;
 
 @Controller
 public class LoginController {
 
-    @Resource
-    LoginServiceImpl loginServiceImpl;
+    @Autowired
+    private LoginService loginService;
 
-    // -----------------------------------------------------------
-    //  GET http://localhost:8080/login
-    // -----------------------------------------------------------
+    // ユーザ登録画面表示
+    @GetMapping("/register")
+    public String showRegisterForm() {
+        return "register";
+    }
+
+    // ユーザ登録処理
+    @PostMapping("/register")
+    public String register(@RequestParam String username,
+                           @RequestParam String password) {
+        loginService.register(username, password);
+        return "redirect:/login";
+    }
+
+    // ログイン画面表示
     @GetMapping("/login")
-    public String getLogin(Model model) {
-
+    public String showLoginForm() {
         return "login";
     }
 
-    // -----------------------------------------------------------
-    //  POST http://localhost:8080/login
-    // -----------------------------------------------------------
+    // ログイン処理
     @PostMapping("/login")
-    public String postLogin(@RequestParam("email") String email, @RequestParam("password") String password, Model model) throws NoSuchAlgorithmException {
-
-        // メールアドレスとパスワードでログイン可能かをチェックします
-        boolean result = loginServiceImpl.LoginVerification(email, password);
-
-        if (result) {
-            return "homePage";
-        } else {
-            model.addAttribute("errMessage", "入力した情報に誤りがあります、再度確認し入力して下さい。");
-            return "login";
-        }
-
+    public String login(@RequestParam String username,
+                        @RequestParam String password,
+                        HttpSession session) {
+        Login login = loginService.login(username, password);
+        session.setAttribute("login", login);
+        session.setMaxInactiveInterval(86400); // 1日
+        return "redirect:/tasks";
     }
 
+    // ログアウト
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 }

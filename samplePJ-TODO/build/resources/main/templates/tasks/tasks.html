@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>タスク一覧</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">📋 タスク一覧</h1>
+    <div class="d-flex justify-content-between mb-3">
+        <button class="btn btn-success" id="createBtn">＋ 新規作成</button>
+        <button class="btn btn-secondary" id="logoutBtn">ログアウト</button>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>タイトル</th>
+            <th>内容</th>
+            <th>登録者</th>
+            <th>開始日</th>
+            <th>終了日</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="taskBody"></tbody>
+    </table>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    loadTasks();
+
+    document.getElementById("createBtn").addEventListener("click", () => {
+        const title = prompt("タイトル:");
+        const content = prompt("内容:");
+        if (title && content) {
+            fetch("/api/tasks", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({title, content})
+            }).then(loadTasks);
+        }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        fetch("/api/auth/logout", {method: "POST"})
+            .then(() => window.location.href = "/login");
+    });
+});
+
+function loadTasks() {
+    fetch("/api/tasks")
+        .then(res => {
+            if (!res.ok) throw new Error("Unauthorized");
+            return res.json();
+        })
+        .then(tasks => {
+            const tbody = document.getElementById("taskBody");
+            tbody.innerHTML = "";
+            tasks.forEach(task => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${task.id}</td>
+                    <td>${task.title}</td>
+                    <td>${task.content}</td>
+                    <td>${task.name}</td>
+                    <td>${task.startDate || "-"}</td>
+                    <td>${task.endDate || "-"}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-1" onclick="editTask(${task.id})">✏ 編集</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteTask(${task.id})">🗑 削除</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }).catch(() => {
+            alert("セッション切れです。ログインし直してください。");
+            window.location.href = "/login";
+        });
+}
+
+function editTask(id) {
+    const title = prompt("新しいタイトル:");
+    const content = prompt("新しい内容:");
+    if (title && content) {
+        fetch(`/api/tasks/${id}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({title, content})
+        }).then(loadTasks);
+    }
+}
+
+function deleteTask(id) {
+    if (confirm("本当に削除しますか？")) {
+        fetch(`/api/tasks/${id}`, {method: "DELETE"})
+            .then(loadTasks);
+    }
+}
+</script>
+</body>
+</html>
