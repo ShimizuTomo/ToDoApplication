@@ -41,7 +41,7 @@ document.getElementById("apiLoginBtn").addEventListener("click", () => {
     }).then(res => {
         if (res.ok) {
             // ✅ 成功時にThymeleafページにリダイレクト
-            window.location.href = "/tasks";
+            window.location.href = "/api/tasks";
         } else {
             alert("🚨 APIログイン失敗");
         }
