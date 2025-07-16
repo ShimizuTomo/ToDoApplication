@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="mb-4 text-center">📋 タスク一覧</h1>
+    <h1 class="mb-4 text-center">タスク一覧</h1>
     <div class="d-flex justify-content-between mb-3">
         <button class="btn btn-success" id="createBtn">＋ 新規作成</button>
         <button class="btn btn-secondary" id="logoutBtn">ログアウト</button>
@@ -69,8 +69,8 @@ function loadTasks() {
                     <td>${task.startDate || "-"}</td>
                     <td>${task.endDate || "-"}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary me-1" onclick="editTask(${task.id})">✏ 編集</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteTask(${task.id})">🗑 削除</button>
+                        <button class="btn btn-sm btn-primary me-1" onclick="editTask(${task.id})">編集</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteTask(${task.id})">削除</button>
                     </td>
                 `;
                 tbody.appendChild(row);

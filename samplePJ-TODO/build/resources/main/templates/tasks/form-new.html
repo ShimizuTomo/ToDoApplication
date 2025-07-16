@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h2>🆕 新規タスク作成</h2>
+    <h2>新規タスク作成</h2>
     <form th:action="@{/tasks}" th:object="${task}" method="post">
         <div class="mb-3">
             <label for="title" class="form-label">タイトル *</label>
@@ -29,7 +29,7 @@
             <label for="endDate" class="form-label">終了日</label>
             <input type="date" class="form-control" id="endDate" th:field="*{endDate}">
         </div>
-        <button type="submit" class="btn btn-success">💾 保存</button>
+        <button type="submit" class="btn btn-success">保存</button>
         <a href="/tasks" class="btn btn-secondary">← キャンセル</a>
     </form>
 </div>

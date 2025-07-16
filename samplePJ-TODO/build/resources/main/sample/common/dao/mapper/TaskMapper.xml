@@ -45,9 +45,9 @@
         UPDATE tasks
         SET title = #{task.title},
             content = #{task.content},
+            name = #{task.name},
             start_date = #{task.startDate},
-            end_date = #{task.endDate},
-            updated_at = NOW()
+            end_date = #{task.endDate}
         WHERE id = #{task.id} AND username = #{username}
     </update>
 

@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="mb-4 text-center">📋 タスク一覧</h1>
+    <h1 class="mb-4 text-center">タスク一覧</h1>
 
     <!-- タスクが1件以上ならテーブルとページネーション表示 -->
     <div th:if="${#lists.size(tasks) > 0}">
@@ -38,10 +38,10 @@
                     <td th:text="${task.updatedAt}"></td>
                     <td class="d-flex gap-1">
                         <!-- 編集ボタン -->
-                        <a th:href="@{'/tasks/edit/' + ${task.id}}" class="btn btn-sm btn-primary">✏ 編集</a>
+                        <a th:href="@{'/tasks/edit/' + ${task.id}}" class="btn btn-sm btn-primary">編集</a>
                         <!-- 削除ボタン -->
                         <form th:action="@{'/tasks/delete/' + ${task.id}}" method="post" th:object="${task}" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('本当に削除しますか？');">🗑 削除</button>
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('本当に削除しますか？');">削除</button>
                         </form>
                     </td>
                 </tr>
@@ -67,7 +67,7 @@
 
     <!-- タスクが0件のとき -->
     <div th:if="${#lists.isEmpty(tasks)}" class="alert alert-info text-center">
-        📭 現在タスクは登録されていません。「新規作成」から追加してください。
+        現在タスクは登録されていません。「新規作成」から追加してください。
     </div>
 
     <!-- 新規作成ボタンは常に表示 -->
